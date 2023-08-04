@@ -39,9 +39,9 @@ regd_users.post("/login", (req,res) => {
           const accesstoken = jwt.sign({
               data:password
           },'access',{expiresIn:60*60})
-          req.session.authenticated={
-            accesstoken,username
-           }
+          req.session.authenticated = {
+            accesstoken, username
+          };
            return res.status(200).send("User successfully logged in")
       }
       else{
@@ -52,8 +52,26 @@ regd_users.post("/login", (req,res) => {
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const isbn = req.params.isbn;
+  if(isbn){
+      const book = Object.values(books).filter((book)=>book.isbn==isbn);
+      book.reviews =req.body.reviews;
+      res.send(book);
+  }
+  else
+  return res.status(300).json({message: "not book found corresponding isbn"});
 });
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    //Write your code here
+    const isbn = req.params.isbn;
+    if(isbn){
+        const book = Object.values(books).filter((book)=>book.isbn==isbn);
+       delete books[book];
+       res.send(`book ${isbn} is delete succesfully`);
+    }
+    else
+    return res.status(300).json({message: "not book found corresponding isbn"});
+  });
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;

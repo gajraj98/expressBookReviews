@@ -32,7 +32,7 @@ public_users.get('/',async function(req,res){
 });
 
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
+public_users.get('/isbn/:isbn', async function (req, res) {
   //Write your code here
   try{
       const isbn = req.params.isbn;
@@ -51,7 +51,7 @@ public_users.get('/isbn/:isbn',function (req, res) {
  });
   
 // Get book details based on author
-public_users.get('/author/:author',function (req, res) {
+public_users.get('/author/:author', async function (req, res) {
   //Write your code here
    
   try{
@@ -68,17 +68,19 @@ public_users.get('/author/:author',function (req, res) {
 });
 
 // Get all books based on title
-public_users.get('/title/:title',function (req, res) {
+public_users.get('/title/:title', async function (req, res) {
   //Write your code here
   try{
     const title  = req.params.title;
-    if (!author) {
+
+    if (!title) {
       return res.status(400).json({ message: 'Author name is required' });
     }
     const list  = Object.values(books).filter((book)=>book.title===title);
     res.send(list);
 }
 catch(error){
+    console.error("Error:", error);
     res.status(500).json({ message: 'Failed to fetch books from title' });
 }
 });
